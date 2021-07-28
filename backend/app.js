@@ -5,7 +5,7 @@ const path = require('path');
 const sauceRoute = require('./routes/sauce');
 const userRoute = require('./routes/user');  
 
-mongoose.connect('mongodb+srv://nartrix:Pelaw1973@@cluster0.valxr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://${process.env.DB_ADMIN_USERNAME}:${process.env.DB_ADMIN_PASSWORD}@cluster0.valxr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
