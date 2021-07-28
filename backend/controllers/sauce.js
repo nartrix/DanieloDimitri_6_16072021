@@ -53,3 +53,30 @@ exports.getSauces = (req, res, next) =>{
     .then((sauces)=> res.status(200).json(sauces))
     .catch((error) => res.status(400).json({error}));
 };
+
+exports.likeSauce = (req, res, next) =>{
+  if(req.body.like ==1){//si user a like
+    Sauce.updateOne({_id: req.params.id}, {$inc:{likes:1}, $push:{usersLiked:req.body.userId },_id:req.params.id } )//c est l id qu on va modifie
+    .then(sauces=> res.status(200).json(sauces))
+    .catch(error => res.status(400).json({error}));
+  }else if(req.body.like ==-1){//si user a dislike
+    Sauce.updateOne({_id: req.params.id}, {$inc:{dislikes:1}, $push:{usersDisliked:req.body.userId },_id:req.params.id } )
+    .then(sauces=> res.status(200).json(sauces))
+    .catch(error => res.status(400).json({error}));
+  }else if(req.body.like ==0){
+    Sauce.findOne({_id: req.params.id})
+    .then(sauces=> {
+      if(sauces.usersLiked.find(user=> user===req.body.userId)){//si il avait like
+        Sauce.updateOne({_id: req.params.id}, {$inc:{likes:-1}, $pull:{usersLiked:req.body.userId },_id:req.params.id } )
+        .then(sauces=> res.status(200).json(sauces))
+        .catch(error => res.status(400).json({error}));
+      }
+      if(sauces.usersDisliked.find(user=> user===req.body.userId)){//si il avait dislike
+        Sauce.updateOne({_id: req.params.id}, {$inc:{dislikes:-1}, $pull:{usersDisliked:req.body.userId },_id:req.params.id } )
+        .then(sauces=> res.status(200).json(sauces))
+        .catch(error => res.status(400).json({error}));
+      }
+    })
+    .catch(error=> res.status(500).json({ error }));
+  }
+}
