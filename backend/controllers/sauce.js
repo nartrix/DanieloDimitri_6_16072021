@@ -31,8 +31,8 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
       .then(sauce => {
-        const filename = sauce.imageUrl.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {
+        const filename = sauce.imageUrl.split('/images/')[1]; // retrieves the name of the image 
+        fs.unlink(`images/${filename}`, () => { //removes the image from the folder
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
             .catch(error => res.status(400).json({ error }));
@@ -42,7 +42,7 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.getSauce=(req, res, next)=>{
-    Sauce.findOne({_id :req.params.id})
+    Sauce.findOne({_id :req.params.id}) // get one sauce
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(404).json({error:error})
     );
@@ -55,23 +55,23 @@ exports.getSauces = (req, res, next) =>{
 };
 
 exports.likeSauce = (req, res, next) =>{
-  if(req.body.like ==1){//si user a like
-    Sauce.updateOne({_id: req.params.id}, {$inc:{likes:1}, $push:{usersLiked:req.body.userId },_id:req.params.id } )//c est l id qu on va modifie
+  if(req.body.like ==1){ // if user like 
+    Sauce.updateOne({_id: req.params.id}, {$inc:{likes:1}, $push:{usersLiked:req.body.userId },_id:req.params.id } )// return the id in an array
     .then(sauces=> res.status(200).json(sauces))
     .catch(error => res.status(400).json({error}));
-  }else if(req.body.like ==-1){//si user a dislike
+  }else if(req.body.like ==-1){ //if user dislike
     Sauce.updateOne({_id: req.params.id}, {$inc:{dislikes:1}, $push:{usersDisliked:req.body.userId },_id:req.params.id } )
     .then(sauces=> res.status(200).json(sauces))
     .catch(error => res.status(400).json({error}));
   }else if(req.body.like ==0){
     Sauce.findOne({_id: req.params.id})
     .then(sauces=> {
-      if(sauces.usersLiked.find(user=> user===req.body.userId)){//si il avait like
+      if(sauces.usersLiked.find(user=> user===req.body.userId)){ //if it had like
         Sauce.updateOne({_id: req.params.id}, {$inc:{likes:-1}, $pull:{usersLiked:req.body.userId },_id:req.params.id } )
         .then(sauces=> res.status(200).json(sauces))
         .catch(error => res.status(400).json({error}));
       }
-      if(sauces.usersDisliked.find(user=> user===req.body.userId)){//si il avait dislike
+      if(sauces.usersDisliked.find(user=> user===req.body.userId)){ //if it had dislike
         Sauce.updateOne({_id: req.params.id}, {$inc:{dislikes:-1}, $pull:{usersDisliked:req.body.userId },_id:req.params.id } )
         .then(sauces=> res.status(200).json(sauces))
         .catch(error => res.status(400).json({error}));

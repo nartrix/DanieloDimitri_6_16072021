@@ -4,11 +4,10 @@ const User = require('../models/user');
 const cryptoJs = require('crypto-js');
 
 exports.signup = (req, res, next) => {
-    /* const hashMail = bcrypt.hash(req.body.email, 10); */
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
-        email: cryptoJs.HmacSHA512(req.body.email, 'RANDOM_KEY_SECRET').toString(),
+        email: cryptoJs.HmacSHA512(req.body.email, 'RANDOM_KEY_SECRET').toString(), // crypt the mail
         password: hash, // hash password
       });
       user.save()
@@ -19,8 +18,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    /* const hashMail = bcrypt.hash(req.body.email, 10); */
-    User.findOne({ email: cryptoJs.HmacSHA512(req.body.email, 'RANDOM_KEY_SECRET').toString(), })
+    User.findOne({ email: cryptoJs.HmacSHA512(req.body.email, 'RANDOM_KEY_SECRET').toString(), }) // get mail encrypt
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
