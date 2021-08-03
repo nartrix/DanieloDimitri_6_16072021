@@ -13,7 +13,7 @@ Sur Windows, ces installations nécessitent d'utiliser PowerShell en tant qu'adm
 ## Development server
 
 ```
-cd front-end
+cd frontend
 npm install 
 ```
 
@@ -24,9 +24,11 @@ Démarrer `ng serve` pour avoir accès au serveur de développement. Rendez-vous
 Installer le backend :
 
 ```
-cd back-end
+cd backend
 npm install 
 ```
+
+Dans le dossier `backend` créer un dossier `images`.
 
 Créer un fichier `.env` en ajoutant les identifiants fournis :
 
