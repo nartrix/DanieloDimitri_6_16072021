@@ -38,3 +38,11 @@ DB_ADMIN_PASSWORD='your MongoDB password'
 ```
 
 Lancer le serveur avec `nodemon server`
+
+### Inscription ###
+
+Respecté la norme pour le mot de passe :
+. Minimun 8 caractères
+. Une majuscule
+. Une miniscule
+. 2 chiffres
